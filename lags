@@ -1,0 +1,18 @@
+#Ammended function from Rami Krispin 'Hands-on Time Series Analysis with R (pg 130)
+
+#Returns the input ts.obj with l lags
+
+lags <- function(ts.obj, l){
+  ts_merged <- NULL
+  # Creating n lags
+  for(i in 1:l){
+    ts_merged <- ts.union(ts_merged, stats::lag(ts.obj, k = -i))
+  }
+  # Merge lags with the original series
+  ts_merged <- ts.union(ts.obj, ts_merged)
+  # Set the columns names
+  colnames(ts_merged) <- c("y", paste0("y_", 1:i))
+  # Removing missing values as results of creating the lags
+  ts_merged <- as.ts(na.omit(as.data.frame(ts_merged)))
+  return(ts_merged)
+}
